@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel and Tourism Management Dashboard</title>
+    <!-- Font Awesome for Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+    <style>
+        /* General Body Styling */
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f1f1f1; /* Light gray background */
+            color: #333;
+            height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Header Styling */
+        header {
+            background-color: #007bff; /* Professional blue */
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            color: #fff;
+            font-size: 32px; /* Increased font size */
+        }
+
+        h1 {
+            margin: 0;
+            font-weight: 600;
+        }
+
+        /* Sidebar Styling */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 300px; /* Increased sidebar width */
+            background-color: #343a40; /* Dark Sidebar */
+            padding-top: 30px;
+            transition: width 0.3s ease, opacity 0.3s ease;
+            z-index: 100;
+            overflow-y: auto;
+            color: #fff;
+        }
+
+        nav.collapsed {
+            width: 0;
+            opacity: 0;
+            pointer-events: none;
+            padding: 0;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        nav ul li {
+            margin: 25px 0; /* Increased spacing between items */
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #fff;
+            font-size: 22px; /* Increased font size */
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background-color: #495057; /* Dark gray background */
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        nav ul li a i {
+            margin-right: 15px; /* Increased icon spacing */
+        }
+
+        nav ul li a:hover {
+            background-color: #007bff; /* Blue on hover */
+            transform: scale(1.1); /* Slight scaling effect */
+        }
+
+        nav ul li a:active {
+            background-color: #0056b3; /* Darker blue on active */
+        }
+
+        /* Dropdown Menu Styling */
+        .dropdown-menu {
+            display: none;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            background-color: #495057;
+            border-radius: 5px;
+        }
+
+        .dropdown.open .dropdown-menu {
+            display: block;
+        }
+
+        /* Main Content Area */
+        .content {
+            margin-left: 330px; /* Increased content margin */
+            padding: 30px;
+            transition: margin-left 0.3s ease;
+        }
+
+        .content.collapsed {
+            margin-left: 0;
+        }
+
+        /* Introduction Section Styling */
+        .intro-container {
+            background-color: #fff;
+            padding: 40px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .intro-container h2 {
+            font-size: 36px; /* Increased title font size */
+            margin-bottom: 20px;
+        }
+
+        .intro-container p {
+            font-size: 22px; /* Increased paragraph font size */
+            line-height: 1.8;
+        }
+
+        /* Box Styling */
+        .info-box {
+            background-color: #fff;
+            padding: 30px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            margin: 20px 0;
+            display: inline-block;
+            width: 45%; /* Increased info-box width */
+            box-sizing: border-box;
+            transition: transform 0.3s ease;
+        }
+
+        .info-box:hover {
+            transform: scale(1.1);
+        }
+
+        .info-box h3 {
+            font-size: 30px; /* Increased heading font size */
+            margin-bottom: 15px;
+        }
+
+        .info-box p {
+            font-size: 18px; /* Increased paragraph font size */
+            color: #555;
+        }
+
+        /* Sidebar Toggle Button */
+        #toggleSidebar {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #007bff;
+            color: #fff;
+            padding: 15px 25px; /* Increased padding */
+            font-size: 22px; /* Increased font size */
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            z-index: 1000;
+            transition: background-color 0.3s ease;
+        }
+
+        #toggleSidebar:hover {
+            background-color: #0056b3;
+        }
+
+        /* Footer Styling */
+        footer {
+            background-color: #343a40;
+            color: #fff;
+            text-align: center;
+            padding: 30px 0; /* Increased padding */
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            font-size: 18px; /* Increased font size */
+        }
+
+        .contact-details {
+            margin-top: 15px;
+            font-size: 20px; /* Increased font size */
+            color: #ccc;
+        }
+
+        .contact-details a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .contact-details a:hover {
+            color: #0056b3;
+        }
+
+        /* Responsive Design for Smaller Screens */
+        @media (max-width: 768px) {
+            nav {
+                width: 250px; /* Increased for more space */
+                padding-left: 15px;
+            }
+
+            .content {
+                margin-left: 0;
+                padding: 15px;
+            }
+
+            header {
+                font-size: 26px; /* Increased font size */
+            }
+
+            #toggleSidebar {
+                top: 10px;
+                right: 10px;
+                padding: 12px 20px;
+                font-size: 18px;
+            }
+
+            footer {
+                font-size: 16px; /* Increased font size */
+            }
+
+            .info-box {
+                width: 48%; /* Adjusted for more space */
+                margin: 15px 1%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            nav {
+                width: 220px; /* Increased for more space */
+            }
+
+            header {
+                font-size: 22px; /* Increased font size */
+            }
+
+            #toggleSidebar {
+                top: 5px;
+                right: 5px;
+                padding: 10px 18px;
+                font-size: 16px;
+            }
+        }
+
+        /* Image Styling */
+        .image-container {
+            text-align: center;
+            margin: 50px 0;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 15px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .additional-info {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 50px; /* Increased margin */
+        }
+
+        .additional-info .info-box {
+            width: 48%;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header>
+        Travel and Tourism Management Dashboard
+    </header>
+
+    <!-- Sidebar Menu -->
+    <nav id="sidebar">
+        <ul>
+            <li class="dropdown">
+                <a href="javascript:void(0)"><i class="fas fa-users"></i> Users</a>
+                <ul class="dropdown-menu">
+                    <li><a href="{{ url_for('add_user') }}">Add User</a></li>
+                    <li><a href="{{ url_for('view_users') }}">View Users</a></li>
+                </ul>
+            </li>
+
+            <li class="dropdown">
+                <a href="javascript:void(0)"><i class="fas fa-route"></i> Travel Packages</a>
+                <ul class="dropdown-menu">
+                    <li><a href="{{ url_for('add_package') }}">Add Package</a></li>
+                    <li><a href="{{ url_for('view_packages') }}">View Packages</a></li>
+                </ul>
+            </li>
+
+            <li><a href="#"><i class="fas fa-cogs"></i> Settings</a></li>
+            <li><a href="#"><i class="fas fa-question-circle"></i> Help</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content Area -->
+    <div class="content">
+        <!-- Sidebar Toggle Button -->
+        <button id="toggleSidebar"><i class="fas fa-bars"></i></button>
+
+        <div class="intro-container">
+            <h2>Welcome to the Travel and Tourism Dashboard</h2>
+            <p>This dashboard allows you to manage your travel and tourism business efficiently, from handling users to organizing travel packages.</p>
+        </div>
+
+        <div class="info-box">
+            <h3>Quick Stats</h3>
+            <p>Total Packages: 45</p>
+            <p>Total Users: 120</p>
+        </div>
+
+        <div class="info-box">
+            <h3>Latest Updates</h3>
+            <p>Check out the new features and updates for the travel booking system.</p>
+        </div>
+
+        <div class="additional-info">
+            <div class="info-box">
+                <h3>Bookings</h3>
+                <p>There are 30 bookings made this week.</p>
+            </div>
+
+            <div class="info-box">
+                <h3>Customer Feedback</h3>
+                <p>Recent customer reviews are overwhelmingly positive.</p>
+            </div>
+        </div>
+
+        <!-- Footer Section -->
+        <footer>
+            <p>&copy; 2024 Travel and Tourism. All Rights Reserved.</p>
+            <div class="contact-details">
+                <p>Contact us: <a href="mailto:info@travel.com">info@travel.com</a></p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        document.getElementById('toggleSidebar').addEventListener('click', function() {
+            const sidebar = document.getElementById('sidebar');
+            const content = document.querySelector('.content');
+            sidebar.classList.toggle('collapsed');
+            content.classList.toggle('collapsed');
+        });
+
+        const dropdowns = document.querySelectorAll('.dropdown');
+        dropdowns.forEach(dropdown => {
+            dropdown.addEventListener('click', function() {
+                this.classList.toggle('open');
+            });
+        });
+    </script>
+</body>
+</html>

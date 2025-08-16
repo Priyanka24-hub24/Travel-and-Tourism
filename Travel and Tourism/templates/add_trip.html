@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Trip</title>
+    <style>
+        /* General Body Styling */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f6f9; /* Light gray background for a clean look */
+            color: #333; /* Dark text for high contrast */
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background-image: url(https://www.touristsecrets.com/wp-content/uploads/2023/09/is-the-life-of-a-traveler-bound-to-be-a-lonely-one-1695376880.jpg);
+            background-size: cover;
+        }
+
+        /* Form Container */
+        .form-container {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+            border: 1px solid #ddd;
+        }
+
+        /* Header Styling */
+        h1 {
+            text-align: center;
+            font-size: 28px;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        /* Label Styling */
+        label {
+            font-size: 14px;
+            color: #7f8c8d;
+            margin-bottom: 8px;
+            display: block;
+            font-weight: 500;
+        }
+
+        /* Input Fields Styling */
+        input[type="number"], input[type="text"], input[type="date"], button {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            color: #2c3e50;
+            background-color: #f9f9f9;
+            transition: border-color 0.3s ease;
+        }
+
+        /* Input Focus Effect */
+        input[type="number"]:focus, input[type="text"]:focus, input[type="date"]:focus, button:focus {
+            border-color: #3498db; /* Blue border on focus for better visibility */
+            outline: none;
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.2);
+        }
+
+        /* Submit Button Styling */
+        button {
+            background-color: #3498db;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            padding: 14px;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        /* Button Hover Effect */
+        button:hover {
+            background-color: #2980b9;
+            transform: scale(1.05);
+        }
+
+        /* Error Message Styling */
+        .error {
+            color: #e74c3c;
+            font-size: 14px;
+            margin-top: -10px;
+            text-align: center;
+        }
+
+        /* Link Button Styling */
+        a {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #3498db;
+            font-size: 16px;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: #2980b9;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .form-container {
+                width: 90%;
+                padding: 25px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1>Add Trip</h1>
+        <form id="tripForm" method="POST" onsubmit="return validateForm()">
+            <label for="tripid">Trip ID:</label>
+            <input type="number" id="tripid" name="tripid" required placeholder="Enter trip ID">
+
+            <label for="destinationid">Destination ID:</label>
+            <input type="number" id="destinationid" name="destinationid" required placeholder="Enter destination ID">
+
+            <label for="userid">User ID:</label>
+            <input type="number" id="userid" name="userid" required placeholder="Enter user ID">
+
+            <label for="startdate">Start Date:</label>
+            <input type="date" id="startdate" name="startdate" required placeholder="Select start date">
+
+            <label for="enddate">End Date:</label>
+            <input type="date" id="enddate" name="enddate" required placeholder="Select end date">
+
+            <label for="maxparticipants">Max Participants:</label>
+            <input type="number" id="maxparticipants" name="maxparticipants" required placeholder="Enter max participants">
+
+            <button type="submit">Add Trip</button>
+        </form>
+
+        <div id="errorMessages"></div>
+
+        <a href="{{ url_for('index') }}">Back to Home</a>
+    </div>
+
+    <script>
+        function validateForm() {
+            // Clear previous error messages
+            document.getElementById('errorMessages').innerHTML = '';
+            let errorMessages = [];
+            
+            // Get form inputs
+            let tripId = document.getElementById('tripid').value;
+            let destinationId = document.getElementById('destinationid').value;
+            let userId = document.getElementById('userid').value;
+            let startDate = document.getElementById('startdate').value;
+            let endDate = document.getElementById('enddate').value;
+            let maxParticipants = document.getElementById('maxparticipants').value;
+
+            // Validation checks
+            if (tripId == "" || destinationId == "" || userId == "" || startDate == "" || endDate == "" || maxParticipants == "") {
+                errorMessages.push('All fields are required.');
+            }
+
+            // Check if end date is after start date
+            if (new Date(startDate) > new Date(endDate)) {
+                errorMessages.push('End date must be after start date.');
+            }
+
+            if (maxParticipants <= 0 || isNaN(maxParticipants)) {
+                errorMessages.push('Max participants must be a valid number greater than 0.');
+            }
+
+            // If there are errors, prevent form submission
+            if (errorMessages.length > 0) {
+                let errorDiv = document.getElementById('errorMessages');
+                errorMessages.forEach(function(msg) {
+                    errorDiv.innerHTML += <p class="error">${msg}</p>;
+                });
+                return false;
+            }
+
+            return true;  // Allow form submission if no errors
+        }
+    </script>
+</body>
+</html>

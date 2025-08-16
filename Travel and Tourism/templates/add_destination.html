@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Destination</title>
+    <style>
+        /* Reset and Basic Styling */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5; /* Light grey background for a clean look */
+            color: #333;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background-image: url(https://www.touristsecrets.com/wp-content/uploads/2023/09/is-the-life-of-a-traveler-bound-to-be-a-lonely-one-1695376880.jpg);
+            background-size: cover;
+        }
+
+        /* Form Container Styling */
+        .form-container {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+            border: 1px solid #e0e0e0;
+        }
+
+        /* Header Styling */
+        h1 {
+            text-align: center;
+            font-size: 28px;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        /* Label Styling */
+        label {
+            font-size: 14px;
+            color: #7f8c8d;
+            margin-bottom: 8px;
+            display: block;
+            font-weight: 500;
+        }
+
+        /* Input Fields Styling */
+        input[type="number"], input[type="text"], input[type="submit"] {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            color: #2c3e50;
+            background-color: #f9f9f9;
+            transition: border-color 0.3s ease;
+        }
+
+        /* Input Focus Styling */
+        input[type="number"]:focus, input[type="text"]:focus {
+            border-color: #3498db;
+            outline: none;
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.2);
+        }
+
+        /* Submit Button Styling */
+        input[type="submit"] {
+            background-color: #3498db;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            padding: 14px;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        /* Submit Button Hover Effect */
+        input[type="submit"]:hover {
+            background-color: #2980b9;
+            transform: scale(1.05);
+        }
+
+        /* Error Message Styling */
+        .error {
+            color: #e74c3c;
+            font-size: 14px;
+            margin-top: -10px;
+            text-align: center;
+        }
+
+        /* Back Link Styling */
+        a {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #3498db;
+            font-size: 16px;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: #2980b9;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .form-container {
+                width: 90%;
+                padding: 25px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1>Add Destination</h1>
+        <form id="destinationForm" method="POST" onsubmit="return validateForm()">
+            <label for="destinationid">Destination ID:</label>
+            <input type="number" id="destinationid" name="destinationid" required placeholder="Enter destination ID">
+
+            <label for="destination_name">Destination Name:</label>
+            <input type="text" id="destination_name" name="destination_name" required placeholder="Enter destination name">
+
+            <label for="country">Country:</label>
+            <input type="text" id="country" name="country" placeholder="Enter country">
+
+            <label for="rating">Rating (1-5):</label>
+            <input type="number" id="rating" name="rating" step="0.1" min="1" max="5" placeholder="Enter rating (1-5)">
+
+            <input type="submit" value="Add Destination">
+        </form>
+
+        <div id="errorMessages"></div>
+
+        <a href="{{ url_for('index') }}">Back to Home</a>
+    </div>
+
+    <script>
+        function validateForm() {
+            // Clear previous error messages
+            document.getElementById('errorMessages').innerHTML = '';
+            let errorMessages = [];
+            
+            // Get form inputs
+            let destinationId = document.getElementById('destinationid').value;
+            let destinationName = document.getElementById('destination_name').value;
+            let country = document.getElementById('country').value;
+            let rating = document.getElementById('rating').value;
+
+            // Validation checks
+            if (destinationId == "" || destinationName == "") {
+                errorMessages.push('Destination ID and Name are required.');
+            }
+
+            if (rating < 1 || rating > 5) {
+                errorMessages.push('Rating must be between 1 and 5.');
+            }
+
+            // If there are errors, prevent form submission
+            if (errorMessages.length > 0) {
+                let errorDiv = document.getElementById('errorMessages');
+                errorMessages.forEach(function(msg) {
+                    errorDiv.innerHTML += <p class="error">${msg}</p>;
+                });
+                return false;
+            }
+
+            return true;  // Allow form submission if no errors
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel and Tourism Management Dashboard</title>
+    <!-- Font Awesome for Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        /* General Body Styling */
+        body {
+            font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f1f1f1; /* Light gray background */
+            color: #333;
+            height: 100vh;
+            overflow-x: hidden;
+            background-image: url(https://www.pixelstalk.net/wp-content/uploads/2016/08/Desktop-Travel-Images.jpg);
+            background-size:auto;
+            background-repeat: no-repeat;
+        }
+
+        /* Header Styling */
+        header {
+            background-color: #007bff; /* Professional blue */
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            color: #fff;
+            font-size: 24px;
+        }
+
+        h1 {
+            margin: 0;
+            font-weight: 600;
+        }
+
+        /* Sidebar Styling */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 250px;
+            background-color: #343a40; /* Dark Sidebar */
+            padding-top: 20px;
+            transition: width 0.3s ease, opacity 0.3s ease;
+            z-index: 100;
+            overflow-y: auto;
+            color: #fff;
+        }
+
+        nav.collapsed {
+            width: 0;
+            opacity: 0;
+            pointer-events: none;
+            padding: 0;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        nav ul li {
+            margin: 15px 0;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #fff;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            background-color: #495057; /* Dark gray background */
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        nav ul li a i {
+            margin-right: 10px; /* Icon spacing */
+        }
+
+        nav ul li a:hover {
+            background-color: #007bff; /* Blue on hover */
+            transform: scale(1.05); /* Slight scaling effect */
+        }
+
+        nav ul li a:active {
+            background-color: #0056b3; /* Darker blue on active */
+        }
+
+        /* Dropdown Menu Styling */
+        .dropdown-menu {
+            display: none;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            background-color: #495057;
+            border-radius: 5px;
+        }
+
+        .dropdown.open .dropdown-menu {
+            display: block;
+        }
+
+        /* Main Content Area */
+        .content {
+            margin-left: 270px;
+            padding: 20px;
+            transition: margin-left 0.3s ease;
+        }
+
+        .content.collapsed {
+            margin-left: 0;
+        }
+
+        /* Introduction Section Styling */
+        .intro-container {
+            background-color: #fff;
+            padding: 30px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .intro-container h2 {
+            font-size: 28px;
+            margin-bottom: 15px;
+        }
+
+        .intro-container p {
+            font-size: 18px;
+            line-height: 1.6;
+        }
+
+        /* Box Styling */
+        .info-box {
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            margin: 15px 0;
+            display: inline-block;
+            width: 30%;
+            box-sizing: border-box;
+            transition: transform 0.3s ease;
+        }
+
+        .info-box:hover {
+            transform: scale(1.05);
+        }
+
+        .info-box h3 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .info-box p {
+            font-size: 16px;
+            color: #555;
+        }
+
+        /* Sidebar Toggle Button */
+        #toggleSidebar {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            font-size: 18px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            z-index: 1000;
+            transition: background-color 0.3s ease;
+        }
+
+        #toggleSidebar:hover {
+            background-color: #0056b3;
+        }
+
+        /* Footer Styling */
+        footer {
+            background-color: #343a40;
+            color: #fff;
+            text-align: center;
+            padding: 20px 0;
+            position:relative;
+            bottom: 0;
+            width: 100%;
+            font-size: 14px;
+        }
+
+        .contact-details {
+            margin-top: 10px;
+            font-size: 16px;
+            color: #ccc;
+        }
+
+        .contact-details a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .contact-details a:hover {
+            color: #0056b3;
+        }
+
+        /* Responsive Design for Smaller Screens */
+        @media (max-width: 768px) {
+            nav {
+                width: 200px;
+                padding-left: 10px;
+            }
+
+            .content {
+                margin-left: 0;
+                padding: 10px;
+            }
+
+            header {
+                font-size: 20px;
+            }
+
+            #toggleSidebar {
+                top: 10px;
+                right: 10px;
+                padding: 8px 15px;
+                font-size: 16px;
+            }
+
+            footer {
+                font-size: 12px;
+            }
+
+            .info-box {
+                width: 48%;
+                margin: 10px 1%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            nav {
+                width: 180px;
+            }
+
+            header {
+                font-size: 18px;
+            }
+
+            #toggleSidebar {
+                top: 5px;
+                right: 5px;
+                padding: 8px 12px;
+                font-size: 14px;
+            }
+        }
+
+        /* Image Styling */
+        .image-container {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .additional-info {
+            display: flex;
+            justify-content:space-between;
+            margin-top: 30px;
+        }
+
+        .additional-info .info-box {
+            width: 48%;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header style="font-size:90px;font-family: Georgia, 'Times New Roman', Times, serif;color: #f1f1f1;">
+        ELITE TOURISM
+    </header>
+
+    <!-- Sidebar Menu -->
+    <nav id="sidebar">
+        <center><h1>Travel Admin</h1></center>
+        <ul>
+            <li class="dropdown">
+                <a href="javascript:void(0)"><i class="fas fa-users"></i> Users</a>
+                <ul class="dropdown-menu">
+                    <li><a href="{{ url_for('add_user') }}">Add User</a></li>
+                    <li><a href="{{ url_for('view_users') }}">View Users</a></li>
+                </ul>
+            </li>
+
+            <li class="dropdown">
+                <a href="javascript:void(0)"><i class="fas fa-map-marker-alt"></i> Destinations</a>
+                <ul class="dropdown-menu">
+                    <li><a href="{{ url_for('add_destination') }}">Add Destination</a></li>
+                    <li><a href="{{ url_for('view_destinations') }}">View Destinations</a></li>
+                </ul>
+            </li>
+
+            <li class="dropdown">
+                <a href="javascript:void(0)"><i class="fas fa-route"></i> Trips</a>
+                <ul class="dropdown-menu">
+                    <li><a href="{{ url_for('add_trip') }}">Add Trip</a></li>
+                    <li><a href="{{ url_for('view_trips') }}">View Trips</a></li>
+                </ul>
+            </li>
+
+            <li class="dropdown">
+               <a href="javascript:void(0)"><i class="fas fa-bookmark"></i> Bookings</a>
+               <ul class="dropdown-menu">
+                    <li><a href="{{ url_for('add_booking') }}">Add Booking</a></li>
+                    <li><a href="{{ url_for('view_bookings') }}">View Bookings</a></li>
+               </ul>
+            </li>
+
+            <li class="dropdown">
+                <a href="javascript:void(0)"><i class="fas fa-credit-card"></i> Payments</a>
+                <ul class="dropdown-menu">
+                    <li><a href="{{ url_for('add_payment') }}">Add Payment</a></li>
+                    <li><a href="{{ url_for('view_payments') }}">View Payments</a></li>
+                </ul>
+            </li>
+
+            <li class="dropdown">
+                <a href="javascript:void(0)"><i class="fas fa-comments"></i> Reviews</a>
+                <ul class="dropdown-menu">
+                    <li><a href="{{ url_for('add_review') }}">Add Review</a></li>
+                    <li><a href="{{ url_for('view_reviews') }}">View Reviews</a></li>
+                </ul>
+            </li>
+
+            <li class="dropdown">
+                <a href="javascript:void(0)"><i class="fas fa-user-tie"></i> Guides</a>
+                <ul class="dropdown-menu">
+                    <li><a href="{{ url_for('add_guide') }}">Add Guide</a></li>
+                    <li><a href="{{ url_for('view_guides') }}">View Guides</a></li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Content Section -->
+    <div id="content" class="content">
+        <!-- Introduction Section -->
+        <div class="intro-container">
+            <h2>Welcome to the Travel and Tourism Management Dashboard</h2>
+            <p>
+                This platform allows you to manage and monitor various aspects of your travel and tourism business. From managing users, destinations, and trips to handling bookings, payments, and reviews, everything you need to run a successful travel management business is at your fingertips.
+            </p>
+            <p>
+                Explore the different sections in the sidebar to get started with managing your resources effectively and efficiently.
+            </p>
+        </div>
+
+        <!-- Info Boxes -->
+        <div class="info-box">
+            <h3>Manage Users</h3>
+            <p>Create and manage users, including staff and customers, with ease. Add new users and view existing ones.</p>
+        </div>
+        <div class="info-box">
+            <h3>Explore Destinations</h3>
+            <p>Add new destinations and explore a collection of top travel spots for your customers to visit.</p>
+        </div>
+        <div class="info-box">
+            <h3>Book Your Trips</h3>
+            <p>Manage customer trip bookings, from initial plans to confirmation of travel arrangements.</p>
+        </div>
+
+         <!-- Image Section -->
+         <div class="image-container">
+            <img src="https://img.buzzfeed.com/buzzfeed-static/static/2014-08/18/5/campaign_images/webdr09/which-european-city-are-you-2-10940-1408353090-9_dblbig.jpg" alt="Tourism Image">
+            <p><em>Discover the world's top tourist destinations.</em></p>
+        </div>
+
+        <!-- Additional Content Section -->
+        <div class="additional-info">
+            <div class="info-box">
+                <h3>Customer Reviews</h3>
+                <p>Collect and manage customer feedback on trips, destinations, and guides. Ensure a high level of customer satisfaction.</p>
+            </div>
+            <div class="info-box">
+                <h3>Tour Guides</h3>
+                <p>Add and manage tour guides who assist travelers during their trips. View their availability and schedule.</p>
+            </div>
+        </div>
+        
+    </div>
+
+    <!-- Sidebar Toggle Button -->
+    <button id="toggleSidebar">☰</button>
+
+    <!-- Footer Section -->
+    
+    <footer>
+        <p>&copy; 2024 ELITE TOURISM . All Rights Reserved.</p>
+        <div class="contact-details">
+            <p>Contact us at <a href="mailto:elitetourism@123.com">elitetourism@123.com</a> or call 1-800-123-4567</p>
+        </div>
+    </footer>
+
+    <script>
+        // Toggle Sidebar
+        const sidebar = document.getElementById('sidebar');
+        const content = document.getElementById('content');
+        const toggleSidebar = document.getElementById('toggleSidebar');
+
+        toggleSidebar.addEventListener('click', () => {
+            sidebar.classList.toggle('collapsed');
+            content.classList.toggle('collapsed');
+        });
+
+        // Dropdown Menu Toggle
+        const dropdowns = document.querySelectorAll('.dropdown');
+        dropdowns.forEach(dropdown => {
+            const link = dropdown.querySelector('a');
+            link.addEventListener('click', (e) => {
+                e.preventDefault(); // Prevent the link from navigating
+                dropdown.classList.toggle('open');
+            });
+        });
+    </script>
+
+</body>
+</html>
